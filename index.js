@@ -16,8 +16,8 @@ const { DatabaseSync } = require('node:sqlite');
 const PORT       = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'brightpath-super-secret-jwt-2025-change-in-production';
 const SESSION_MS = 7 * 24 * 60 * 60 * 1000;
-const PUBLIC_DIR = path.join(__dirname, '..', 'public');
-const DB_PATH    = process.env.DB_PATH || path.join(__dirname, '..', 'brightpath.db');
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const DB_PATH    = process.env.DB_PATH || path.join(__dirname, 'brightpath.db');
 
 ['students','admissions','news'].forEach(d =>
   fs.mkdirSync(path.join(PUBLIC_DIR, 'uploads', d), { recursive: true })
