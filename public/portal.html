@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parent Portal — Mowlem Creek Premier School</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--forest:#8B0000;--forest-l:#A00000;--gold:#C9A84C;--gold-l:#E8C96A;--cream:#FDF5F5;--bg:#F8F2F2;--white:#fff;--danger:#DC3545;--success:#198754;--muted:#7A6B6B;--border:#F0E0E0;--shadow:0 2px 16px rgba(27,58,45,0.08);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#1C1C1E;min-height:100vh;}
+
+  /* LOGIN */
+  #login-screen{position:fixed;inset:0;background:var(--forest);display:flex;align-items:center;justify-content:center;z-index:1000;background-image:radial-gradient(circle at 30% 70%,rgba(200,151,58,0.15) 0%,transparent 50%);}
+  .login-box{background:white;border-radius:20px;padding:48px 44px;width:min(420px,90vw);box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+  .login-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--forest);margin-bottom:4px;}
+  .login-sub{font-size:0.78rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:28px;}
+
+  /* TOPBAR */
+  .topbar{background:var(--forest);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .topbar-logo{font-family:'Playfair Display',serif;font-size:1rem;color:var(--gold-l);}
+  .topbar-right{display:flex;align-items:center;gap:16px;}
+  .topbar-user{font-size:0.8rem;color:rgba(255,255,255,0.7);}
+  .logout-btn{font-size:0.75rem;color:rgba(255,255,255,0.5);cursor:pointer;background:none;border:1px solid rgba(255,255,255,0.2);padding:6px 14px;border-radius:6px;transition:all 0.2s;}
+  .logout-btn:hover{background:rgba(255,255,255,0.1);color:white;}
+
+  /* TAB NAV */
+  .tab-nav{background:white;border-bottom:1px solid var(--border);padding:0 28px;display:flex;gap:0;overflow-x:auto;}
+  .tab{padding:14px 22px;font-size:0.82rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.2s;}
+  .tab:hover{color:var(--forest);}
+  .tab.active{color:var(--forest);border-bottom-color:var(--gold);}
+
+  /* CONTENT */
+  .content{padding:28px;max-width:1100px;margin:0 auto;}
+  .page{display:none;}
+  .page.active{display:block;}
+
+  /* WELCOME BANNER */
+  .welcome-banner{background:var(--forest);border-radius:16px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  .welcome-text h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:white;margin-bottom:6px;}
+  .welcome-text p{font-size:0.83rem;color:rgba(255,255,255,0.6);}
+  .welcome-badge{background:rgba(200,151,58,0.2);border:1px solid rgba(200,151,58,0.4);border-radius:10px;padding:16px 22px;text-align:center;}
+  .welcome-badge .num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-l);}
+  .welcome-badge .lbl{font-size:0.68rem;color:rgba(255,255,255,0.5);letter-spacing:0.1em;text-transform:uppercase;}
+
+  /* STUDENT CARD */
+  .students-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:24px;}
+  .student-card{background:white;border-radius:14px;border:1px solid var(--border);padding:20px 22px;cursor:pointer;transition:all 0.25s;}
+  .student-card:hover{box-shadow:var(--shadow);transform:translateY(-3px);border-color:var(--gold);}
+  .sc-top{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .sc-avatar{width:48px;height:48px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;border:2px solid var(--border);}
+  .sc-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--forest);}
+  .sc-grade{font-size:0.72rem;color:var(--gold);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;}
+  .sc-stats{display:flex;gap:16px;}
+  .sc-stat{display:flex;flex-direction:column;gap:2px;}
+  .sc-stat-val{font-size:0.88rem;font-weight:600;color:var(--forest);}
+  .sc-stat-lbl{font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+
+  /* CARDS */
+  .card{background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+  .card-header{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+  .card-header h3{font-size:0.92rem;font-weight:600;color:var(--forest);}
+  .card-body{padding:22px;}
+  table{width:100%;border-collapse:collapse;}
+  th{font-size:0.67rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;background:var(--cream);border-bottom:1px solid var(--border);}
+  td{padding:10px 14px;font-size:0.82rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+
+  /* GRADE BADGE */
+  .grade-A{color:#065F46;font-weight:700;} .grade-B{color:#1E40AF;font-weight:700;} .grade-C{color:#92400E;font-weight:700;} .grade-D{color:#991B1B;font-weight:700;} .grade-E{color:#6B7280;}
+
+  /* MPESA PANEL */
+  .mpesa-panel{background:white;border-radius:16px;border:2px solid #00B300;overflow:hidden;margin-bottom:20px;}
+  .mpesa-header{background:linear-gradient(135deg,#00B300,#007700);padding:20px 24px;display:flex;align-items:center;gap:14px;}
+  .mpesa-logo{width:52px;height:52px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:#007700;font-family:'DM Sans',sans-serif;}
+  .mpesa-header h3{font-size:1.1rem;font-weight:700;color:white;}
+  .mpesa-header p{font-size:0.78rem;color:rgba(255,255,255,0.75);}
+  .mpesa-body{padding:24px;}
+  .fee-breakdown{background:var(--cream);border-radius:10px;padding:16px;margin-bottom:20px;}
+  .fee-row{display:flex;justify-content:space-between;padding:6px 0;font-size:0.83rem;border-bottom:1px solid var(--border);}
+  .fee-row:last-child{border-bottom:none;font-weight:700;color:var(--forest);font-size:0.9rem;}
+  .mpesa-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-group label{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--forest);}
+  .form-group input,.form-group select{padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;outline:none;transition:border-color 0.2s;}
+  .form-group input:focus,.form-group select:focus{border-color:#00B300;}
+  .form-full{grid-column:1/-1;}
+  .mpesa-btn{width:100%;padding:14px;background:#00B300;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+  .mpesa-btn:hover{background:#007700;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,179,0,0.3);}
+  .mpesa-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+  .status-box{background:var(--cream);border-radius:10px;padding:16px;margin-top:16px;display:none;text-align:center;}
+  .status-box.show{display:block;}
+  .status-icon{font-size:2.5rem;margin-bottom:8px;}
+  .status-msg{font-size:0.88rem;color:var(--forest);font-weight:600;}
+  .status-sub{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+
+  /* ALERTS */
+  .alert{padding:12px 16px;border-radius:8px;font-size:0.82rem;margin-bottom:16px;display:none;}
+  .alert.show{display:block;}
+  .alert-success{background:#D1FAE5;color:#065F46;}
+  .alert-danger{background:#FEE2E2;color:#991B1B;}
+  .alert-info{background:#DBEAFE;color:#1E40AF;}
+
+  /* NOTICE CARD */
+  .notice-item{padding:16px;border-bottom:1px solid var(--border);}
+  .notice-item:last-child{border-bottom:none;}
+  .notice-title{font-size:0.88rem;font-weight:600;color:var(--forest);margin-bottom:4px;}
+  .notice-body{font-size:0.8rem;color:var(--muted);line-height:1.6;}
+  .notice-date{font-size:0.68rem;color:var(--muted);margin-top:6px;}
+
+  /* ATTENDANCE */
+  .att-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .att-stat{background:var(--cream);border-radius:10px;padding:16px;text-align:center;}
+  .att-num{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--forest);font-weight:700;}
+  .att-lbl{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+
+  /* BTNS */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:0.78rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+  .btn-primary{background:var(--forest);color:white;}
+  .btn-outline{background:none;border:1.5px solid var(--border);color:var(--forest);}
+  .btn-sm{padding:5px 12px;font-size:0.72rem;}
+
+  @media(max-width:600px){.mpesa-form{grid-template-columns:1fr;} .att-grid{grid-template-columns:1fr 1fr;} .welcome-banner{flex-direction:column;gap:16px;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Mowlem Creek Premier School</div>
+    <div class="login-sub">Parent &amp; Guardian Portal</div>
+    <div id="login-alert" class="alert alert-danger"></div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Email Address</label>
+      <input type="email" id="login-email" placeholder="your@email.com" value="">
+    </div>
+    <div class="form-group" style="margin-bottom:22px;">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" value="">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:0.88rem;" onclick="doLogin()">Sign In to Portal →</button>
+    <p style="text-align:center;margin-top:14px;font-size:0.75rem;color:var(--muted);">Forgot password? Contact <a href="mailto:admin@mowlemcreekpremier.sc.ke" style="color:var(--gold);">admin@mowlemcreekpremier.sc.ke</a></p>
+    <p style="text-align:center;margin-top:10px;font-size:0.72rem;color:var(--muted);">Demo: wanjiru.kariuki@gmail.com / Parent@2025</p>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo" style="display:flex;align-items:center;gap:10px;"><span>🏫</span><span>Mowlem Creek Premier School</span></div>
+  <div class="topbar-right">
+    <span class="topbar-user">👋 Welcome, <span id="user-name">Parent</span></span>
+    <button class="logout-btn" onclick="doLogout()">Logout</button>
+    <a href="/" style="font-size:0.75rem;color:rgba(255,255,255,0.5);text-decoration:none;padding:5px 12px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;margin-left:6px;">🌐 School Website</a>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <div class="tab active" onclick="showTab('home')">🏠 Home</div>
+  <div class="tab" onclick="showTab('results')">📝 Results</div>
+  <div class="tab" onclick="showTab('attendance')">📅 Attendance</div>
+  <div class="tab" onclick="showTab('payments')">💳 Pay Fees (M-Pesa)</div>
+  <div class="tab" onclick="showTab('history')">🧾 Payment History</div>
+  <div class="tab" onclick="showTab('notices')">🔔 Notices</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- HOME -->
+  <div id="tab-home" class="page active">
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2>Good day, <span id="banner-name">Parent</span></h2>
+        <p>View your children's academic progress, pay fees via M-Pesa, and stay updated with school notices.</p>
+      </div>
+      <div class="welcome-badge">
+        <div class="num" id="children-count">—</div>
+        <div class="lbl">Children Enrolled</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--forest);margin-bottom:14px;">Your Children</h3>
+    <div class="students-grid" id="students-list"></div>
+
+    <div class="card">
+      <div class="card-header"><h3>📢 Latest Notices</h3></div>
+      <div id="home-notices"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="tab-results" class="page">
+    <div class="card">
+      <div class="card-header">
+        <h3>Academic Results</h3>
+        <div style="display:flex;gap:10px;">
+          <select id="res-student-sel" onchange="loadResults()" style="padding:7px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:0.8rem;font-family:'DM Sans',sans-serif;">
+            <option value="">Select Child</option>
+          </select>
+          <select id="res-term-sel" onchange="loadResults()" style="padding:7px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:0.8rem;font-family:'DM Sans',sans-serif;">
+            <option value="1">Term 1</option>
+            <option value="2">Term 2</option>
+            <option value="3">Term 3</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="results-summary" style="margin-bottom:16px;display:none;">
+          <div style="background:var(--cream);border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.83rem;color:var(--muted);">Class Average</span>
+            <span id="results-avg" style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);font-weight:700;"></span>
+          </div>
+        </div>
+        <table><thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Exam Type</th></tr></thead><tbody id="results-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE -->
+  <div id="tab-attendance" class="page">
+    <div class="card">
+      <div class="card-header">
+        <h3>Attendance Record</h3>
+        <select id="att-student-sel" onchange="loadAttendance()" style="padding:7px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:0.8rem;font-family:'DM Sans',sans-serif;">
+          <option value="">Select Child</option>
+        </select>
+      </div>
+      <div class="card-body">
+        <div class="att-grid" style="margin-bottom:20px;">
+          <div class="att-stat"><div class="att-num" id="att-present">—</div><div class="att-lbl">Present</div></div>
+          <div class="att-stat"><div class="att-num" id="att-absent" style="color:var(--danger);">—</div><div class="att-lbl">Absent</div></div>
+          <div class="att-stat"><div class="att-num" id="att-late" style="color:var(--gold);">—</div><div class="att-lbl">Late</div></div>
+          <div class="att-stat"><div class="att-num" id="att-rate" style="color:var(--success);">—</div><div class="att-lbl">Rate</div></div>
+        </div>
+        <table><thead><tr><th>Date</th><th>Status</th><th>Note</th></tr></thead><tbody id="att-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAY FEES — M-PESA -->
+  <div id="tab-payments" class="page">
+    <div class="mpesa-panel">
+      <div class="mpesa-header">
+        <div class="mpesa-logo">M</div>
+        <div>
+          <h3>Pay School Fees via M-Pesa</h3>
+          <p>Secure STK Push to your M-Pesa registered line</p>
+        </div>
+      </div>
+      <div class="mpesa-body">
+        <div id="mpesa-alert" class="alert"></div>
+
+        <div class="fee-breakdown" id="fee-breakdown">
+          <div class="fee-row"><span>Tuition Fee</span><span id="fb-tuition">—</span></div>
+          <div class="fee-row"><span>Activity Fee</span><span id="fb-activity">—</span></div>
+          <div class="fee-row"><span>Lunch Fee</span><span id="fb-lunch">—</span></div>
+          <div class="fee-row"><span>Transport</span><span id="fb-transport">—</span></div>
+          <div class="fee-row"><span>Total Due</span><span id="fb-total">—</span></div>
+        </div>
+
+        <div class="mpesa-form">
+          <div class="form-group">
+            <label>Select Child</label>
+            <select id="pay-student" onchange="updateFeeBreakdown()">
+              <option value="">-- Select --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Term</label>
+            <select id="pay-term" onchange="updateFeeBreakdown()">
+              <option value="1">Term 1 — 2025</option>
+              <option value="2">Term 2 — 2025</option>
+              <option value="3">Term 3 — 2025</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount (KES)</label>
+            <input type="number" id="pay-amount" placeholder="e.g. 44500" min="100">
+          </div>
+          <div class="form-group">
+            <label>M-Pesa Phone Number</label>
+            <input type="tel" id="pay-phone" placeholder="07XX XXX XXX">
+          </div>
+        </div>
+
+        <button class="mpesa-btn" id="mpesa-pay-btn" onclick="initiateMpesa()">
+          <span>📱</span> Send STK Push to My Phone
+        </button>
+
+        <div class="status-box" id="mpesa-status">
+          <div class="status-icon" id="mpesa-status-icon">📱</div>
+          <div class="status-msg" id="mpesa-status-msg">Check your phone</div>
+          <div class="status-sub" id="mpesa-status-sub">Enter your M-Pesa PIN to complete the payment</div>
+        </div>
+
+        <p style="font-size:0.73rem;color:var(--muted);margin-top:14px;text-align:center;">M-Pesa payments are processed securely via Safaricom Daraja API. Your receipt will appear in your SMS within 30 seconds.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT HISTORY -->
+  <div id="tab-history" class="page">
+    <div class="card">
+      <div class="card-header">
+        <h3>Payment History</h3>
+        <span id="total-paid-badge" style="font-size:0.82rem;color:var(--muted);font-weight:600;"></span>
+      </div>
+      <div class="card-body">
+        <table><thead><tr><th>Date</th><th>Student</th><th>Amount</th><th>M-Pesa Receipt</th><th>Term</th><th>Status</th></tr></thead>
+        <tbody id="history-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTICES -->
+  <div id="tab-notices" class="page">
+    <div class="card">
+      <div class="card-header"><h3>School Notices</h3></div>
+      <div id="notices-list"></div>
+    </div>
+  </div>
+
+</div><!-- content -->
+
+<script>
+let token = localStorage.getItem('bp_parent_token');
+let currentUser = null;
+let myStudents = [];
+let feeData = [];
+const API = '';
+
+// ── AUTH ──────────────────────────────────────────────────────────────────
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pass  = document.getElementById('login-pass').value;
+  try {
+    const r = await fetch(`${API}/api/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password: pass}) });
+    const d = await r.json();
+    if (!d.success) { showAlert('login-alert', d.message, 'danger'); return; }
+    if (d.user.role !== 'parent') { showAlert('login-alert', 'This portal is for parents and guardians only.', 'danger'); return; }
+    token = d.token;
+    localStorage.setItem('bp_parent_token', token);
+    currentUser = d.user;
+    document.getElementById('login-screen').style.display = 'none';
+    initPortal();
+  } catch(e) { showAlert('login-alert', 'Connection error. Is the server running?', 'danger'); }
+}
+
+function doLogout() { localStorage.removeItem('bp_parent_token'); location.reload(); }
+
+async function api(path, opts = {}) {
+  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, ...opts.headers };
+  const r = await fetch(API + path, { ...opts, headers });
+  return r.json();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+async function initPortal() {
+  document.getElementById('user-name').textContent = currentUser.full_name.split(' ')[0];
+  document.getElementById('banner-name').textContent = currentUser.full_name.split(' ')[0];
+
+  const [studD, feeD, noticeD] = await Promise.all([
+    api('/api/students'),
+    api('/api/fees?year=2025'),
+    api('/api/notices')
+  ]);
+
+  myStudents = studD.students || [];
+  feeData    = feeD.fees || [];
+
+  document.getElementById('children-count').textContent = myStudents.length;
+
+  // Populate student selects
+  const selects = ['res-student-sel','att-student-sel','pay-student'];
+  selects.forEach(id => {
+    const el = document.getElementById(id);
+    el.innerHTML = '<option value="">-- Select Child --</option>';
+    myStudents.forEach(s => {
+      el.innerHTML += `<option value="${s.id}" data-grade="${s.grade}">${s.full_name} (${s.grade})</option>`;
+    });
+  });
+
+  // Render student cards
+  const grid = document.getElementById('students-list');
+  grid.innerHTML = myStudents.map(s => `
+    <div class="student-card">
+      <div class="sc-top">
+        <div class="sc-avatar">${s.gender === 'Female' ? '👧🏾' : '👦🏾'}</div>
+        <div>
+          <div class="sc-name">${s.full_name}</div>
+          <div class="sc-grade">${s.grade} · Stream ${s.stream || 'A'}</div>
+        </div>
+      </div>
+      <div class="sc-stats">
+        <div class="sc-stat"><div class="sc-stat-val">${s.admission_no}</div><div class="sc-stat-lbl">Adm No.</div></div>
+        <div class="sc-stat"><div class="sc-stat-val">${s.gender}</div><div class="sc-stat-lbl">Gender</div></div>
+      </div>
+    </div>
+  `).join('') || '<p style="color:var(--muted);font-size:0.85rem;">No students linked to this account.</p>';
+
+  // Notices
+  const notices = noticeD.notices || [];
+  const homeNotices = notices.slice(0,4);
+  document.getElementById('home-notices').innerHTML = homeNotices.map(n => `
+    <div class="notice-item">
+      <div class="notice-title">${n.title}</div>
+      <div class="notice-body">${n.body.slice(0,120)}${n.body.length > 120 ? '…' : ''}</div>
+      <div class="notice-date">${new Date(n.created_at).toLocaleDateString('en-KE', {day:'numeric',month:'long',year:'numeric'})}</div>
+    </div>
+  `).join('') || '<div class="notice-item" style="color:var(--muted);font-size:0.82rem;">No recent notices.</div>';
+
+  document.getElementById('notices-list').innerHTML = notices.map(n => `
+    <div class="notice-item">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div class="notice-title">${n.title}</div>
+        <span style="font-size:0.65rem;background:var(--cream);padding:3px 10px;border-radius:100px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">${n.audience}</span>
+      </div>
+      <div class="notice-body">${n.body}</div>
+      <div class="notice-date">📅 ${new Date(n.created_at).toLocaleDateString('en-KE', {weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
+    </div>
+  `).join('') || '<div class="notice-item" style="color:var(--muted);font-size:0.82rem;padding:24px;">No notices available.</div>';
+}
+
+// ── RESULTS ───────────────────────────────────────────────────────────────
+
+async function loadResults() {
+  const sid  = document.getElementById('res-student-sel').value;
+  const term = document.getElementById('res-term-sel').value;
+  const tb   = document.getElementById('results-tbody');
+  if (!sid) { tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">Select a child above to view results.</td></tr>'; return; }
+
+  const d = await api(`/api/students/${sid}/results?term=${term}&year=2025`);
+  document.getElementById('results-summary').style.display = d.average ? 'block' : 'none';
+  document.getElementById('results-avg').textContent = d.average ? `${d.average}%` : '';
+
+  tb.innerHTML = (d.results || []).map(r => `<tr>
+    <td>${r.subject}</td>
+    <td><strong>${r.score}/${r.max_score}</strong> <span style="color:var(--muted);font-size:0.72rem;">(${((r.score/r.max_score)*100).toFixed(0)}%)</span></td>
+    <td><span class="grade-${r.grade_letter}">${r.grade_letter}</span></td>
+    <td style="font-size:0.75rem;color:var(--muted);">${r.exam_type}</td>
+  </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">No results found for this term.</td></tr>';
+}
+
+// ── ATTENDANCE ────────────────────────────────────────────────────────────
+
+async function loadAttendance() {
+  const sid = document.getElementById('att-student-sel').value;
+  const tb  = document.getElementById('att-tbody');
+  if (!sid) { tb.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px;">Select a child above.</td></tr>'; return; }
+
+  const d = await api(`/api/students/${sid}/attendance`);
+  const s = d.summary || {};
+  document.getElementById('att-present').textContent = s.present || 0;
+  document.getElementById('att-absent').textContent  = s.absent || 0;
+  document.getElementById('att-late').textContent    = s.late || 0;
+  const rate = s.total ? Math.round(((s.present + s.late) / s.total) * 100) : 0;
+  document.getElementById('att-rate').textContent = `${rate}%`;
+
+  const statusColors = { present: '#065F46', absent: '#991B1B', late: '#92400E', excused: '#1E40AF' };
+  tb.innerHTML = (d.attendance || []).map(a => `<tr>
+    <td>${new Date(a.date).toLocaleDateString('en-KE', {weekday:'short',day:'numeric',month:'short',year:'numeric'})}</td>
+    <td><span style="color:${statusColors[a.status] || '#6B7280'};font-weight:700;text-transform:capitalize;">${a.status}</span></td>
+    <td style="color:var(--muted);font-size:0.78rem;">${a.note || '—'}</td>
+  </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px;">No attendance records found.</td></tr>';
+}
+
+// ── M-PESA ────────────────────────────────────────────────────────────────
+
+function updateFeeBreakdown() {
+  const sel   = document.getElementById('pay-student');
+  const grade = sel.options[sel.selectedIndex]?.dataset?.grade;
+  const term  = document.getElementById('pay-term').value;
+
+  const fee = feeData.find(f => f.grade === grade && String(f.term) === String(term));
+  if (fee) {
+    document.getElementById('fb-tuition').textContent   = `KES ${Number(fee.tuition).toLocaleString()}`;
+    document.getElementById('fb-activity').textContent  = `KES ${Number(fee.activity).toLocaleString()}`;
+    document.getElementById('fb-lunch').textContent     = `KES ${Number(fee.lunch).toLocaleString()}`;
+    document.getElementById('fb-transport').textContent = `KES ${Number(fee.transport).toLocaleString()}`;
+    document.getElementById('fb-total').textContent     = `KES ${Number(fee.total).toLocaleString()}`;
+    document.getElementById('pay-amount').value = fee.total;
+  } else {
+    ['tuition','activity','lunch','transport','total'].forEach(f => document.getElementById(`fb-${f}`).textContent = '—');
+    document.getElementById('pay-amount').value = '';
+  }
+}
+
+let pollInterval = null;
+
+async function initiateMpesa() {
+  const student_id = document.getElementById('pay-student').value;
+  const amount     = document.getElementById('pay-amount').value;
+  const phone      = document.getElementById('pay-phone').value;
+  const term       = document.getElementById('pay-term').value;
+
+  if (!student_id) { showAlert('mpesa-alert', 'Please select a child.', 'danger'); return; }
+  if (!amount || amount < 100) { showAlert('mpesa-alert', 'Please enter a valid amount (min KES 100).', 'danger'); return; }
+  if (!phone) { showAlert('mpesa-alert', 'Please enter the M-Pesa phone number.', 'danger'); return; }
+
+  const btn = document.getElementById('mpesa-pay-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Sending STK Push...';
+
+  const statusBox = document.getElementById('mpesa-status');
+  statusBox.style.display = 'none';
+
+  try {
+    const d = await api('/api/mpesa/initiate', {
+      method: 'POST',
+      body: JSON.stringify({ student_id: Number(student_id), amount: Number(amount), phone, description: `Term ${term} Fees`, term: Number(term), year: 2025 })
+    });
+
+    if (!d.success) {
+      showAlert('mpesa-alert', d.message, 'danger');
+      btn.disabled = false;
+      btn.innerHTML = '<span>📱</span> Send STK Push to My Phone';
+      return;
+    }
+
+    // Show status box - waiting for PIN
+    statusBox.style.display = 'block';
+    document.getElementById('mpesa-status-icon').textContent = '📱';
+    document.getElementById('mpesa-status-msg').textContent = 'STK Push Sent! Check Your Phone';
+    document.getElementById('mpesa-status-sub').textContent = `Enter your M-Pesa PIN on ${phone} to complete KES ${Number(amount).toLocaleString()} payment`;
+
+    // Poll for payment status every 4 seconds
+    let attempts = 0;
+    pollInterval = setInterval(async () => {
+      attempts++;
+      if (attempts > 10) {
+        clearInterval(pollInterval);
+        document.getElementById('mpesa-status-icon').textContent = '⏰';
+        document.getElementById('mpesa-status-msg').textContent = 'Payment Timeout';
+        document.getElementById('mpesa-status-sub').textContent = 'Did not receive confirmation. If you paid, check your SMS. Contact us if payment was deducted.';
+        btn.disabled = false;
+        btn.innerHTML = '<span>📱</span> Send STK Push to My Phone';
+        return;
+      }
+
+      const statusD = await api(`/api/mpesa/status/${d.checkout_request_id}`);
+      if (statusD.payment?.status === 'completed') {
+        clearInterval(pollInterval);
+        document.getElementById('mpesa-status-icon').textContent = '✅';
+        document.getElementById('mpesa-status-msg').textContent = `Payment Successful! KES ${Number(amount).toLocaleString()}`;
+        document.getElementById('mpesa-status-sub').textContent = `M-Pesa Receipt: ${statusD.payment.mpesa_receipt || 'Confirming...'}. Thank you!`;
+        statusBox.style.background = '#D1FAE5';
+        btn.disabled = false;
+        btn.innerHTML = '<span>📱</span> Make Another Payment';
+        loadPaymentHistory();
+      }
+    }, 4000);
+
+  } catch(e) {
+    showAlert('mpesa-alert', 'Connection error. Please try again.', 'danger');
+    btn.disabled = false;
+    btn.innerHTML = '<span>📱</span> Send STK Push to My Phone';
+  }
+}
+
+async function loadPaymentHistory() {
+  const d = await api('/api/mpesa/history');
+  const tb = document.getElementById('history-tbody');
+  if (d.total_paid) document.getElementById('total-paid-badge').textContent = `Total Paid: KES ${Number(d.total_paid).toLocaleString()}`;
+
+  const statusColor = { completed: '#065F46', pending: '#92400E', failed: '#991B1B' };
+  tb.innerHTML = (d.payments || []).map(p => `<tr>
+    <td>${new Date(p.created_at).toLocaleDateString('en-KE')}</td>
+    <td>${p.student_name || '—'}</td>
+    <td><strong>KES ${Number(p.amount).toLocaleString()}</strong></td>
+    <td><code style="font-size:0.72rem;">${p.mpesa_receipt || '—'}</code></td>
+    <td>Term ${p.term || '—'}</td>
+    <td><span style="color:${statusColor[p.status]};font-weight:700;text-transform:capitalize;">${p.status}</span></td>
+  </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No payment history found.</td></tr>';
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+
+function showTab(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => { if (t.getAttribute('onclick')?.includes(`'${name}'`)) t.classList.add('active'); });
+  if (name === 'history') loadPaymentHistory();
+}
+
+function showAlert(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = `alert alert-${type} show`;
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (token) {
+    fetch(`${API}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(d => {
+        if (d.success && d.user.role === 'parent') {
+          currentUser = d.user;
+          document.getElementById('login-screen').style.display = 'none';
+          initPortal();
+        } else { localStorage.removeItem('bp_parent_token'); token = null; }
+      });
+  }
+  document.getElementById('login-pass').addEventListener('keypress', e => { if (e.key === 'Enter') doLogin(); });
+});
+</script>
+</body>
+</html>
