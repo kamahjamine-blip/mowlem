@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mowlem Creek Premier School — Nairobi, Kenya</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #8B0000;
+    --forest-l: #A00000;
+    --gold: #C9A84C;
+    --gold-l: #E8C96A;
+    --cream: #FDF5F5;
+    --bg: #F8F2F2;
+    --white: #fff;
+    --muted: #7A6B6B;
+    --border: #F0E0E0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: #1C1C1E; }
+
+  /* NAV */
+  nav {
+    background: var(--forest);
+    padding: 0 40px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--gold-l);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 8px; align-items: center; }
+  .nav-link {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .nav-link:hover { color: white; background: rgba(255,255,255,0.08); }
+  .nav-link.btn {
+    background: var(--gold);
+    color: var(--forest);
+    font-weight: 700;
+  }
+  .nav-link.btn:hover { background: var(--gold-l); }
+
+  /* HERO */
+  .hero {
+    background: var(--forest);
+    background-image: radial-gradient(circle at 70% 30%, rgba(201,168,76,0.12) 0%, transparent 60%),
+                      radial-gradient(circle at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 50%);
+    padding: 100px 40px 80px;
+    text-align: center;
+    color: white;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold-l);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-hero-primary {
+    background: var(--gold);
+    color: var(--forest);
+  }
+  .btn-hero-primary:hover { background: var(--gold-l); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.4); }
+  .btn-hero-outline {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 1.5px solid rgba(255,255,255,0.25);
+  }
+  .btn-hero-outline:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--forest);
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* SECTION */
+  .section { padding: 72px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  /* PORTAL CARDS */
+  .portal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .portal-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gold);
+  }
+  .portal-card.admin::before { background: var(--forest); }
+  .portal-card:hover { box-shadow: 0 8px 32px rgba(139,0,0,0.12); transform: translateY(-4px); border-color: var(--gold); }
+  .portal-icon { font-size: 2.5rem; margin-bottom: 16px; }
+  .portal-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+  .portal-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+  .portal-link {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--forest);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* FEATURES */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+  }
+  .feature-icon { font-size: 1.8rem; margin-bottom: 14px; }
+  .feature-card h4 { font-size: 0.95rem; font-weight: 700; color: var(--forest); margin-bottom: 8px; }
+  .feature-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* NEWS */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .news-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .news-card:hover { box-shadow: 0 4px 20px rgba(139,0,0,0.08); transform: translateY(-2px); }
+  .news-cat {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+  .news-card h4 { font-size: 0.92rem; font-weight: 700; color: var(--forest); margin-bottom: 8px; line-height: 1.4; }
+  .news-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.65; }
+  .news-date { font-size: 0.7rem; color: var(--muted); margin-top: 12px; }
+
+  /* EVENTS */
+  .events-list { display: flex; flex-direction: column; gap: 12px; }
+  .event-item {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .event-date-box {
+    background: var(--forest);
+    color: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 56px;
+    flex-shrink: 0;
+  }
+  .event-day { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; line-height: 1; }
+  .event-month { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-l); margin-top: 2px; }
+  .event-info h4 { font-size: 0.88rem; font-weight: 700; color: var(--forest); margin-bottom: 4px; }
+  .event-info p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ADMISSIONS CTA */
+  .admissions-cta {
+    background: var(--forest);
+    background-image: radial-gradient(circle at 80% 50%, rgba(201,168,76,0.15) 0%, transparent 60%);
+    border-radius: 20px;
+    padding: 56px 48px;
+    text-align: center;
+    color: white;
+    margin: 0 40px 72px;
+  }
+  .admissions-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  .admissions-cta p { font-size: 0.9rem; color: rgba(255,255,255,0.65); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+  /* ENQUIRY FORM */
+  .enquiry-form {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 36px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); }
+  .form-group input, .form-group textarea, .form-group select {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--forest); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-full { grid-column: 1 / -1; }
+  .btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: var(--forest);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: var(--forest-l); }
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .alert.show { display: block; }
+  .alert-success { background: #D1FAE5; color: #065F46; }
+  .alert-danger { background: #FEE2E2; color: #991B1B; }
+
+  /* FOOTER */
+  footer {
+    background: var(--forest);
+    color: rgba(255,255,255,0.6);
+    padding: 48px 40px 32px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto 40px; }
+  .footer-brand h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold-l); margin-bottom: 10px; }
+  .footer-brand p { font-size: 0.8rem; line-height: 1.7; }
+  .footer-col h4 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+  .footer-col a { display: block; font-size: 0.8rem; color: rgba(255,255,255,0.55); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--gold-l); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; text-align: center; font-size: 0.75rem; max-width: 1100px; margin: 0 auto; }
+
+  /* HEALTH BADGE */
+  .health-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    transition: all 0.2s;
+    margin-top: 16px;
+  }
+  .health-badge:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.25); }
+  .health-dot { width: 6px; height: 6px; background: #22C55E; border-radius: 50%; }
+
+  /* LOADING */
+  .loading { color: var(--muted); font-size: 0.82rem; padding: 24px; text-align: center; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 60px 20px 50px; }
+    .stats-bar { gap: 30px; padding: 24px 20px; }
+    .section { padding: 48px 20px; }
+    .portal-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    .admissions-cta { margin: 0 20px 48px; padding: 40px 24px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Mowlem Creek Premier School</a>
+  <div class="nav-links">
+    <a href="#news" class="nav-link">News</a>
+    <a href="#events" class="nav-link">Events</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="/portal" class="nav-link">Parent Portal</a>
+    <a href="/admin" class="nav-link btn">Admin</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Nairobi, Kenya · CBC Curriculum</div>
+  <h1>Excellence in Education, Rooted in Values</h1>
+  <p>Mowlem Creek Premier School nurtures curious minds and confident leaders from Pre-Primary through Grade 6, guided by the Competency Based Curriculum.</p>
+  <div class="hero-actions">
+    <a href="#admissions" class="btn-hero btn-hero-primary">📋 Apply for Admission</a>
+    <a href="/portal" class="btn-hero btn-hero-outline">👨‍👩‍👧 Parent Portal</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num" id="stat-students">—</div>
+    <div class="stat-lbl">Students Enrolled</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">8</div>
+    <div class="stat-lbl">Grade Levels</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">387</div>
+    <div class="stat-lbl">2024 KCPE Mean Score</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Top 10</div>
+    <div class="stat-lbl">Nairobi County Ranking</div>
+  </div>
+</div>
+
+<!-- PORTALS -->
+<div class="section">
+  <div class="section-title">School Portals</div>
+  <div class="section-sub">Access the right portal for your role — parents can view results, pay fees, and receive notices; administrators manage the full school system.</div>
+  <div class="portal-grid">
+    <a href="/portal" class="portal-card">
+      <div class="portal-icon">👨‍👩‍👧</div>
+      <h3>Parent Portal</h3>
+      <p>View your children's academic results, attendance records, and fee statements. Pay school fees securely via M-Pesa and receive school notices in real time.</p>
+      <div class="portal-link">Sign In to Portal →</div>
+    </a>
+    <a href="/admin" class="portal-card admin">
+      <div class="portal-icon">🏫</div>
+      <h3>Admin Dashboard</h3>
+      <p>Full school management system for administrators — manage students, teachers, admissions, fee structures, news, notices, and view financial reports.</p>
+      <div class="portal-link">Admin Login →</div>
+    </a>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div style="background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 72px 40px;">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-title" style="text-align: center; margin-bottom: 8px;">Why Mowlem Creek Premier School?</div>
+    <div class="section-sub" style="text-align: center; margin-bottom: 40px;">A holistic learning environment where every child thrives</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h4>CBC Curriculum</h4>
+        <p>Fully aligned with Kenya's Competency Based Curriculum, focusing on practical skills, creativity, and critical thinking from an early age.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h4>Academic Excellence</h4>
+        <p>Consistently ranked in the top 10 schools in Nairobi County, with outstanding KCPE results and multiple national school placements each year.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎭</div>
+        <h4>Co-Curricular Activities</h4>
+        <p>Drama, music, sports, and arts programmes that develop well-rounded individuals. Gold Award winners at the Nairobi Drama Festival 2024.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h4>M-Pesa Fee Payments</h4>
+        <p>Convenient and secure school fee payments via M-Pesa STK Push. Instant receipts and payment history available in the parent portal.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👩‍🏫</div>
+        <h4>Qualified Teachers</h4>
+        <p>Experienced, TSC-registered teachers committed to nurturing each child's unique potential through personalised attention and modern pedagogy.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h4>Safe Environment</h4>
+        <p>A secure, child-friendly campus in Westlands with CCTV, controlled access, and a dedicated pastoral care team for every learner's wellbeing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS -->
+<div class="section">
+  <div class="section-title">Latest News</div>
+  <div class="section-sub">Stay updated with the latest from Mowlem Creek Premier School</div>
+  <div class="news-grid" id="news-grid">
+    <div class="loading">Loading news…</div>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<div style="background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 72px 40px;" id="events">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="section-title">Upcoming Events</div>
+    <div class="section-sub">Mark your calendar — important dates for the 2025 academic year</div>
+    <div class="events-list" id="events-list">
+      <div class="loading">Loading events…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMISSIONS CTA -->
+<div id="admissions" style="padding: 72px 0 0;">
+  <div class="admissions-cta">
+    <h2>Admissions Open for 2025/2026</h2>
+    <p>Limited places available across all grades from Pre-Primary 1 to Grade 6. Apply early to secure your child's place at Mowlem Creek Premier School.</p>
+    <a href="#contact" class="btn-hero btn-hero-primary" style="display: inline-flex;">📋 Apply Now</a>
+  </div>
+</div>
+
+<!-- CONTACT / ENQUIRY -->
+<div class="section" id="contact">
+  <div class="section-title">Get in Touch</div>
+  <div class="section-sub">Have a question about admissions, fees, or our programmes? Send us a message and we'll respond within 24 hours.</div>
+  <div class="enquiry-form">
+    <div id="enquiry-alert" class="alert"></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="eq-name" placeholder="e.g. Mrs. Jane Wanjiku">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="eq-email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="eq-phone" placeholder="+254 7XX XXX XXX">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="eq-subject">
+          <option>Admissions Enquiry</option>
+          <option>Fee Structure</option>
+          <option>Academic Programmes</option>
+          <option>School Tour Request</option>
+          <option>General Enquiry</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label>Message</label>
+        <textarea id="eq-message" placeholder="Tell us how we can help you…"></textarea>
+      </div>
+    </div>
+    <button class="btn-submit" onclick="sendEnquiry()">Send Message →</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>Mowlem Creek Premier School</h3>
+      <p>Nurturing excellence and character in every learner. Westlands, Nairobi, Kenya.</p>
+      <a href="/api/health" class="health-badge" id="health-link" target="_blank">
+        <span class="health-dot"></span>
+        <span>System Status</span>
+      </a>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="/portal">Parent Portal</a>
+      <a href="/admin">Admin Dashboard</a>
+      <a href="#news">News & Events</a>
+      <a href="#admissions">Admissions</a>
+      <a href="#contact">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:admin@mowlemcreekpremier.sc.ke">admin@mowlemcreekpremier.sc.ke</a>
+      <a href="tel:+254720111001">+254 720 111 001</a>
+      <a href="#">Westlands, Nairobi</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Mowlem Creek Premier School. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+const API = '';
+
+// ── LOAD NEWS ─────────────────────────────────────────────────────────────
+async function loadNews() {
+  try {
+    const r = await fetch(`${API}/api/news?limit=6`);
+    const d = await r.json();
+    const grid = document.getElementById('news-grid');
+    const posts = d.posts || [];
+    if (!posts.length) {
+      grid.innerHTML = '<div class="loading">No news articles available.</div>';
+      return;
+    }
+    grid.innerHTML = posts.map(n => `
+      <div class="news-card">
+        <div class="news-cat">${n.category}</div>
+        ${n.is_pinned ? '<span style="font-size:0.7rem;color:var(--gold);font-weight:700;">📌 Pinned</span>' : ''}
+        <h4>${n.title}</h4>
+        <p>${n.excerpt || n.content.slice(0, 120)}${(n.excerpt || n.content).length > 120 ? '…' : ''}</p>
+        <div class="news-date">📅 ${new Date(n.published_at || n.created_at).toLocaleDateString('en-KE', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('news-grid').innerHTML = '<div class="loading">Could not load news.</div>';
+  }
+}
+
+// ── LOAD EVENTS ───────────────────────────────────────────────────────────
+async function loadEvents() {
+  try {
+    const r = await fetch(`${API}/api/events`);
+    const d = await r.json();
+    const list = document.getElementById('events-list');
+    const events = d.events || [];
+    if (!events.length) {
+      list.innerHTML = '<div class="loading">No upcoming events.</div>';
+      return;
+    }
+    list.innerHTML = events.map(ev => {
+      const dt = new Date(ev.start_date);
+      const day = dt.getDate();
+      const month = dt.toLocaleDateString('en-KE', { month: 'short' }).toUpperCase();
+      return `
+        <div class="event-item">
+          <div class="event-date-box">
+            <div class="event-day">${day}</div>
+            <div class="event-month">${month}</div>
+          </div>
+          <div class="event-info">
+            <h4>${ev.title}</h4>
+            <p>${ev.description || ''} · 📍 ${ev.location}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch(e) {
+    document.getElementById('events-list').innerHTML = '<div class="loading">Could not load events.</div>';
+  }
+}
+
+// ── LOAD STATS ────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const r = await fetch(`${API}/api/health`);
+    const d = await r.json();
+    if (d.status === 'ok') {
+      document.getElementById('health-link').querySelector('span:last-child').textContent = 'All Systems Operational';
+    }
+  } catch(e) {}
+}
+
+// ── SEND ENQUIRY ──────────────────────────────────────────────────────────
+async function sendEnquiry() {
+  const name    = document.getElementById('eq-name').value.trim();
+  const email   = document.getElementById('eq-email').value.trim();
+  const phone   = document.getElementById('eq-phone').value.trim();
+  const subject = document.getElementById('eq-subject').value;
+  const message = document.getElementById('eq-message').value.trim();
+
+  if (!name || !email || !message) {
+    showAlert('enquiry-alert', 'Please fill in your name, email, and message.', 'danger');
+    return;
+  }
+
+  try {
+    const r = await fetch(`${API}/api/enquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, phone, subject, message })
+    });
+    const d = await r.json();
+    if (d.success) {
+      showAlert('enquiry-alert', d.message, 'success');
+      document.getElementById('eq-name').value = '';
+      document.getElementById('eq-email').value = '';
+      document.getElementById('eq-phone').value = '';
+      document.getElementById('eq-message').value = '';
+    } else {
+      showAlert('enquiry-alert', d.message || 'Something went wrong. Please try again.', 'danger');
+    }
+  } catch(e) {
+    showAlert('enquiry-alert', 'Connection error. Please try again later.', 'danger');
+  }
+}
+
+function showAlert(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.className = `alert alert-${type} show`;
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (type === 'success') setTimeout(() => el.classList.remove('show'), 6000);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  loadNews();
+  loadEvents();
+  loadStats();
+});
+</script>
+</body>
+</html>
